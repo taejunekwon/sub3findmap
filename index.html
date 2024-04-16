@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>하급 대차 계산기</title>
+
+    <style>
+
+        label {
+            display: inline-block;
+            width: 150px;
+        }
+        input[type="number"],
+        select {
+            width: 200px;
+            margin-bottom: 10px;
+        }
+
+<style>
+        body {
+            text-align: center;
+            background-color: #e0e0e0; 
+            margin: 0;
+            padding: 0;
+            color: #333; 
+        }
+
+      .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        header {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: left;
+            margin: 0;
+        }
+
+        nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 5px 10px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s; 
+}
+
+nav a:hover {
+    background-color: #555; 
+}
+
+    .instruction {
+        font-size: 14px; 
+    }
+
+    .sub-instruction {
+        font-size: 12px; 
+    }
+
+    </style>
+
+</head>
+<body>
+<div class="header-container">
+        <header>하급 대차 계산기</header>
+<nav>
+        <a href="https://main.findyangpa.site/">홈으로 이동</a>
+        <a href="https://sub.findyangpa.site/">조치방법 확인</a>
+        <a href="https://www.findyangpa.site/">공업사 찾기</a>
+        <a href="https://serch.findyangpa.site/">부분취소 계산기</a>
+    </nav>
+</div>
+
+<br>
+<br>
+    <label for="discountType">할인 유형:</label> 
+    <select id="discountType">
+        <option value="할인 금액">할인 금액</option>
+        <option value="할인률(%)">할인률(%)</option>
+        <option value="고정 금액">고정 금액</option>
+        <option value="시간 할인">시간 할인</option>
+    </select><br>
+    <label for="originalRentPeriod">대여기간(기존):</label>
+    <input type="number" id="originalRentPeriod"><br>
+    <label for="discountValue">할인 값:</label>
+    <input type="number" id="discountValue"><br>
+    <label for="originalRentFee">대여료(기존):</label>
+    <input type="number" id="originalRentFee"><br>
+    <label for="insuranceFee">보험료(기존):</label>
+    <input type="number" id="insuranceFee"><br>
+    <label for="replacementRentPeriod">대여기간(대차):</label>
+    <input type="number" id="replacementRentPeriod"><br>
+    <label for="newRentFee">대여료(대차):</label>
+    <input type="number" id="newRentFee"><br>
+    <label for="newInsuranceFee">보험료(대차):</label>
+    <input type="number" id="newInsuranceFee"><br>
+    <button onclick="calculateDiscount()">계산하기</button><br>
+<br>
+    <div id="result"></div>
+<br>
+<br>
+<br>
+<div class="instruction">
+* 할인 금액 기준 - ex) 웰컴 기프트 7만원 할인 쿠폰 / 웰컴 기프트 3만원 할인 쿠폰 등 <br>
+ <div class="sub-instruction">
+   &emsp;☞ 기입방법 : 3만원 > 30000 
+</div>
+<br>
+* 고정 금액 기준 - ex) 주중 심야 8,900원 쿠폰 / 쏘카 첫 예약 - 24시간 9,900원 등 <br>
+<div class="sub-instruction">
+   &emsp;☞ 기입방법 : 8,900원 쿠폰 > 8900
+</div>
+<br>
+* 할인률 기준 - ex) [자동발급] 1주 미리예약 45%할인 / 패스포트 50% 할인 쿠폰 등 (% 입력 불필요) <br>
+<div class="sub-instruction">
+  &emsp;☞ 기입방법 : 50%할인 > 50
+</div>
+<br> 
+* 시간 할인 기준 - ex) 쏘카의 진심가득 00시간 무료 쿠폰 <br>
+<div class="sub-instruction">
+   &emsp;☞ 기입방법 : 24시간 > 24
+</div>
+</div>
+    <script>
+       function calculateDiscount() {
+            const B15 = document.getElementById('discountType').value;
+            const C15 = parseFloat(document.getElementById('discountValue').value);
+            const C16 = parseFloat(document.getElementById('originalRentFee').value);
+            const C17 = parseFloat(document.getElementById('insuranceFee').value);
+            const C19 = parseFloat(document.getElementById('newRentFee').value);
+            const C20 = parseFloat(document.getElementById('newInsuranceFee').value);
+            const D14 = parseFloat(document.getElementById('replacementRentPeriod').value);
+            const D18 = parseFloat(document.getElementById('originalRentPeriod').value);
+
+            let result;
+
+            if (B15 === "할인 금액") {
+                result = (C19 - (C15 > C19 ? C19 : C15) + C20) - ((C16 / D14 * D18 - (C15 > (C16 / D14 * D18) ? (C16 / D14 * D18) : C15)) + (C17 / D14 * D18));
+            } else if (B15 === "할인률(%)") {
+                // %를 유지하여 할인률 계산
+                result = ((C19 * (100 - C15) / 100 + C20) - ((C16 / D14 * D18) * (100 - C15) / 100 + (C17 / D14 * D18)));
+            } else if (B15 === "고정 금액") {
+                result = C20 - (C17 / D14 * D18);
+            } else if (B15 === "시간 할인") {
+                result = (C19 - (C19 / D18 * (C15 * 60)) + C20) - (C16 / D14 * D18 - ((C16 / D14 * D18) / D18 * (C15 * 60)) + (C17 / D14 * D18));
+            }
+
+            if (result >= C20 - (C17 / D14 * D18)) {
+                result = C20 - (C17 / D14 * D18);
+            }
+
+            document.getElementById('result').innerText = `결과: ${result}`;
+       }
+    </script>
+</body>
+</html>
